@@ -1,4 +1,5 @@
-FROM node:22-alpine
+# Base image
+FROM node:lts-alpine
 
 WORKDIR /app
 
@@ -8,6 +9,8 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 5173
+RUN npm run build
 
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+EXPOSE 4173
+
+CMD ["npm", "run", "preview", "--", "--port", "4173", "--host"]
