@@ -13,7 +13,23 @@ export class ItemsDl {
 
   constructor(private readonly db: DatabaseService) {}
 
-  async findAll(limit = 50, offset = 0): Promise<Item[]> {
+  async getItemsRegular(limit = 50, offset = 0): Promise<Item[]> {
+    const sql = `
+      SELECT id, name, created_at
+      FROM items
+      ORDER BY id
+      LIMIT $1 OFFSET $2
+    `;
+
+    try {
+      const result = await this.db.pool.query<Item>(sql, [limit, offset]);
+      return result.rows;
+    } catch (err) {
+      this.logger.error('Error executing SQL query in findAll', err);
+      throw err;
+    }
+  }
+  async getItemsCursor(limit = 50, offset = 0): Promise<Item[]> {
     const sql = `
       SELECT id, name, created_at
       FROM items

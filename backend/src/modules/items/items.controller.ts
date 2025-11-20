@@ -9,8 +9,8 @@ export class ItemsController {
 
   @Get()
   async getItems(
-    @Query() {limit, offset}: GetItemsQueryDto,
+    @Query() query: GetItemsQueryDto,
   ): Promise<Item[]> {
-    return await this.itemsService.getItems(limit, offset);
+    return await this.itemsService.getItems(query);
   }
 }
