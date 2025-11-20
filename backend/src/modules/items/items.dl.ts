@@ -1,4 +1,5 @@
-import { pool } from 'infra/postgres';
+import { Injectable, Logger } from '@nestjs/common';
+import { DatabaseService } from 'src/infra/postgres/database.service';
 
 export interface Item {
   id: number;
@@ -6,7 +7,12 @@ export interface Item {
   created_at: Date;
 }
 
+@Injectable()
 export class ItemsDl {
+  private readonly logger = new Logger(ItemsDl.name);
+
+  constructor(private readonly db: DatabaseService) {}
+
   async findAll(limit = 50, offset = 0): Promise<Item[]> {
     const sql = `
       SELECT id, name, created_at
@@ -16,10 +22,10 @@ export class ItemsDl {
     `;
 
     try {
-      const result = await pool.query<Item>(sql, [limit, offset]);
+      const result = await this.db.pool.query<Item>(sql, [limit, offset]);
       return result.rows;
     } catch (err) {
-      console.error('[ItemsDl]:[findAll]', `Error executing SQL query: ${err}`);
+      this.logger.error('Error executing SQL query in findAll', err);
       throw err;
     }
   }

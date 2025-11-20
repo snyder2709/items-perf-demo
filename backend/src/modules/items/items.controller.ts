@@ -1,4 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
+import { GetItemsQueryDto } from './dto/items.dto';
 import { Item } from './items.dl';
 import { ItemsService } from './items.service';
 
@@ -8,11 +9,8 @@ export class ItemsController {
 
   @Get()
   async getItems(
-    @Query('limit') limit = '50',
-    @Query('offset') offset = '0',
+    @Query() {limit, offset}: GetItemsQueryDto,
   ): Promise<Item[]> {
-    const parsedLimit = parseInt(limit, 10);
-    const parsedOffset = parseInt(offset, 10);
-    return await this.itemsService.getItems(parsedLimit, parsedOffset);
+    return await this.itemsService.getItems(limit, offset);
   }
 }
