@@ -24,3 +24,5 @@ docker compose up --build
 
 Переменная окружения SEED_TARGET_ITEMS - колличество генерируемых записей для заполнения бд.
 backend/.env/
+
+Текущее колличество заполнения SEED_TARGET_ITEMS = 100 000
