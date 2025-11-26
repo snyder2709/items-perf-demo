@@ -1,5 +1,4 @@
 import { NestFactory } from '@nestjs/core';
-import { IoAdapter } from '@nestjs/platform-socket.io';
 import { AppModule } from './app.module';
 import { SeedItemsService } from './modules/seed/seed.service';
 
@@ -17,11 +16,7 @@ async function bootstrap() {
     methods: CORS_METHODS,
   });
 
-
   app.setGlobalPrefix(GLOBAL_PREFIX);
-
-  app.useWebSocketAdapter(new IoAdapter(app));
-
   const seedService = app.get(SeedItemsService);
   await seedService.seed();
 

@@ -7,6 +7,6 @@ export const itemsPerfRoutes = [
     meta: {
       title: ROUTES.ITEMS_PERF.title,
     },
-    component: () => import("./ui/ItemsPerfPage.vue"),
+    component: () => import("./page/ItemsPerfPage.vue"),
   },
 ];

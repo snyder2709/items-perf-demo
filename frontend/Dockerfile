@@ -3,6 +3,8 @@ FROM node:lts-alpine
 
 WORKDIR /app
 
+ENV VITE_BASE_API_URL=http://localhost:3000/api
+
 COPY package*.json ./
 
 RUN npm install
@@ -11,6 +13,6 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 4173
+EXPOSE 5173
 
-CMD ["npm", "run", "preview", "--", "--port", "4173", "--host"]
+CMD ["npm", "run", "preview", "--", "--port", "5173", "--host"]

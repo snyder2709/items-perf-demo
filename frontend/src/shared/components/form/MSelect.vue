@@ -28,7 +28,7 @@ export interface SelectOption {
 
 type SelectSize = 'small' | 'medium' | 'large';
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     modelValue: string | number;
     options: SelectOption[];

@@ -23,6 +23,7 @@ export class ItemsDl {
 
     return Number(count);
   }
+
   async getItemsOffset(limit = 50, offset = 0): Promise<Item[]> {
     const queryInfo = {
       type: 'offset',

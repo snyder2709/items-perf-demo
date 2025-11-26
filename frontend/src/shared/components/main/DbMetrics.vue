@@ -161,7 +161,7 @@ const chartOptions = computed<ChartOptions<'line'>>(() => ({
     legend: {
       display: true,
       position: 'top' as const,
-      onClick: (e, legendItem) => {
+      onClick: (_e, legendItem) => {
         const index = legendItem.datasetIndex;
         if (index !== undefined) {
           // Определяем какой run это был (каждый run = 2 датасета)

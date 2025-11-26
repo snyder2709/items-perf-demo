@@ -7,6 +7,6 @@ export const mainRoutes = [
     meta: {
       title: ROUTES.MAIN.title,
     },
-    component: () => import("./ui/MainPage.vue"),
+    component: () => import("./page/MainPage.vue"),
   },
 ];

@@ -15,10 +15,7 @@
 
     <div class="progress-wrapper">
       <div class="progress-bar">
-        <div
-          class="progress-fill"
-          :style="{ width: progressPercent + '%' }"
-        />
+        <div class="progress-fill" :style="{ width: progressPercent + '%' }" />
       </div>
       <div class="progress-text">
         {{ progressPercent }}%
@@ -54,6 +51,7 @@ const progressPercent = computed(() => {
 .state-panel {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
   border-radius: 14px;
   padding: 16px;
 }
@@ -74,7 +72,8 @@ const progressPercent = computed(() => {
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 12px;
-  background: #e5e7eb;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
 }
 
 .state-badge.active {
@@ -90,11 +89,11 @@ const progressPercent = computed(() => {
 }
 
 .success {
-  color: #16a34a;
+  color: var(--color-success);
 }
 
 .error {
-  color: #dc2626;
+  color: var(--color-error);
 }
 
 .progress-wrapper {

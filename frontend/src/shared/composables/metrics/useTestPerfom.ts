@@ -1,7 +1,7 @@
 import instance from '@/app/providers/axios/instance';
 import { queryBuilder } from '@/shared/libs/queryBuilder';
 import { computed, reactive, ref } from 'vue';
-import { usePollingRequest } from '../network/usePollingRequest';
+import { usePollingRequest, type PollType } from '../network/usePollingRequest';
 
 export interface DbQueryLog {
   id: number;
@@ -43,17 +43,20 @@ export interface TestRun {
 }
 
 export function useTestPerform() {
-  const { pollingRequest, requestsCount,state } = usePollingRequest();
+  const { pollingRequest, requestsCount, state, delayMs } = usePollingRequest();
   const testPerfomParams = reactive({
     limit: 50,
     offset: 0,
     cursor: 0,
     cache: false,
     type: 'offset',
+    pollType: 'batch' as PollType,
     requestsCount,
+    delayMs,
     count: 0,
-    increment:0
+    increment: 0
   });
+
 
   const runs = ref<TestRun[]>([]);
   let httpQueryId = 0;
@@ -68,7 +71,6 @@ export function useTestPerform() {
   ): Promise<DbQueryLog> => {
     const startHigh = performance.now();
     const startTs = Date.now();
-
     try {
       await request();
       const endHigh = performance.now();
@@ -141,19 +143,19 @@ export function useTestPerform() {
     const runId = startData.runId;
     const startTime = Date.now();
 
-  const httpResults = await pollingRequest((attempt) => {
-    if (testPerfomParams.type === 'offset') {
-      testPerfomParams.offset = attempt * testPerfomParams.increment;
-    }
+    const httpResults = await pollingRequest((attempt) => {
+      if (testPerfomParams.type === 'offset') {
+        testPerfomParams.offset = attempt * testPerfomParams.increment;
+      }
 
-    if (testPerfomParams.type === 'cursor') {
-      testPerfomParams.cursor = attempt * testPerfomParams.increment;
-    }
+      if (testPerfomParams.type === 'cursor') {
+        testPerfomParams.cursor = attempt * testPerfomParams.increment;
+      }
 
-    const url = queryBuilder('/items', { ...testPerfomParams });
+      const url = queryBuilder('/items', { ...testPerfomParams });
 
-    return buildHttpMetric(() => instance.get(url), url);
-  });
+      return buildHttpMetric(() => instance.get(url), url);
+    }, testPerfomParams.pollType);
 
     const endTime = Date.now();
 
