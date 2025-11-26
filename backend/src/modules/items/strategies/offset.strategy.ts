@@ -7,6 +7,6 @@ export class OffsetStrategy implements ItemsStrategy {
   constructor(private readonly dl: ItemsDl) {}
 
   async getItems({ limit = 50, offset = 0 }: { limit?: number; offset?: number }): Promise<Item[]> {
-    return this.dl.getItemsRegular(limit, offset);
+    return this.dl.getItemsOffset(limit, offset);
   }
 }

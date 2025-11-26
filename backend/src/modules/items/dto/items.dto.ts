@@ -1,7 +1,15 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsInt, IsOptional, Min } from 'class-validator';
+import { IsBoolean, IsEnum, IsInt, IsOptional, Min } from 'class-validator';
 
+export enum ItemsQueryType {
+  OFFSET = 'offset',
+  CURSOR = 'cursor',
+}
 export class GetItemsQueryDto {
+  @IsEnum(ItemsQueryType)
+  @Type(() => String)
+  type: ItemsQueryType = ItemsQueryType.OFFSET;
+
   @IsOptional()
   @Type(() => Number)
   @IsInt()

@@ -2,11 +2,12 @@
   <div
     class="flex-layout"
     :class="[
-      `flex-layout--direction-${direction}`,
-      `flex-layout--align-${align}`,
-      `flex-layout--justify-${justify}`,
-      { 'flex-layout--wrap': wrap }
+      `flex-layout--direction-${props.direction}`,
+      `flex-layout--align-${props.align}`,
+      `flex-layout--justify-${props.justify}`,
+      { 'flex-layout--wrap': props.wrap }
     ]"
+    :style="{'gap':gap+'px'}"
   >
     <slot />
   </div>
@@ -15,32 +16,38 @@
 <script setup lang="ts">
 import { defineProps, withDefaults } from 'vue';
 
-type FlexDirection = 'row' | 'column' | 'row-reverse' | 'column-reverse';
-type FlexAlign = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
-type FlexJustify = 'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly';
+type FlexDirection = 'row' | 'column' | 'row-reverse' | 'column-reverse'
+type FlexAlign = 'start' | 'center' | 'end' | 'stretch' | 'baseline'
+type FlexJustify =
+  | 'start'
+  | 'center'
+  | 'end'
+  | 'space-between'
+  | 'space-around'
+  | 'space-evenly'
 
 const props = withDefaults(
   defineProps<{
-    direction?: FlexDirection;
-    align?: FlexAlign;
-    justify?: FlexJustify;
-    wrap?: boolean;
+    direction?: FlexDirection
+    align?: FlexAlign
+    justify?: FlexJustify
+    wrap?: boolean
+    gap?: string | number
   }>(),
   {
     direction: 'row',
     align: 'stretch',
     justify: 'start',
     wrap: false,
+    gap: 0
   }
-);
+)
 
-const { direction, align, justify, wrap } = props;
 </script>
 
 <style scoped>
 .flex-layout {
   display: flex;
-  gap: var(--spacing-md);
 }
 
 .flex-layout--direction-row {

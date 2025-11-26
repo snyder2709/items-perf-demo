@@ -33,14 +33,7 @@ const rightButtons = ref([
 </script>
 
 <style scoped>
-.main {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
 .main__content {
-  flex: 1 1 auto;
   overflow: auto;
   width: 100%;
   padding: var(--spacing-lg);

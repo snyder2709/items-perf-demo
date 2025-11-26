@@ -52,6 +52,7 @@ withDefaults(
 <style scoped>
 .header {
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: space-between;
   padding: 1rem;

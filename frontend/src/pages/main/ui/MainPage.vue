@@ -1,19 +1,41 @@
 <template>
-  <m-flex direction='column'>
-    <PoolingDemo/>
-    <MarkdownRenderer :content="markdownText" />
+  <m-flex direction="column" gap="16">
+    <TestRunForm
+      v-model="testPerfomParams"
+      @run-test="runTest"
+      @clear-all="clearMetrics"
+    />
+    <DbMetrics
+      :runs="runs"
+      :test-params="testPerfomParams"
+      @remove-run="handleRemoveRun"
+    />
   </m-flex>
 </template>
 
 <script setup lang="ts">
-import PoolingDemo from '@/shared/components/PoolingDemo.vue';
+import DbMetrics from '@/shared/components/main/DbMetrics.vue'
+import { useTestPerform } from '@/shared/composables/metrics/useTestPerfom'
+import { onMounted } from 'vue'
+import TestRunForm from '../components/TestRunForm.vue'
 
+const {
+  runs,
+  runTest,
+  loadAllRuns,
+  clearMetrics,
+  removeRun,
+  testPerfomParams
+} = useTestPerform()
 
-const markdownText = `
-# Пример Markdown
+onMounted(() => {
+  loadAllRuns()
+})
 
-- Пункт 1
-- Пункт 2
-- **Жирный текст**
-`;
+const handleRemoveRun = async (runId: number) => {
+  await removeRun(runId)
+}
 </script>
+
+<style scoped>
+</style>

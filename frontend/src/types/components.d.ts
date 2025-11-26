@@ -12,11 +12,13 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ChangeTheme: typeof import('./../shared/components/main/ChangeTheme.vue')['default']
+    DbMetrics: typeof import('./../shared/components/main/DbMetrics.vue')['default']
     MarkdownRenderer: typeof import('./../shared/components/main/MarkdownRenderer.vue')['default']
     MButton: typeof import('./../shared/components/form/MButton.vue')['default']
     MFlex: typeof import('./../shared/components/layouts/MFlex.vue')['default']
     MHeader: typeof import('./../shared/components/main/MHeader.vue')['default']
     MInput: typeof import('./../shared/components/form/MInput.vue')['default']
+    MSelect: typeof import('./../shared/components/form/MSelect.vue')['default']
     PoolingDemo: typeof import('./../shared/components/PoolingDemo.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

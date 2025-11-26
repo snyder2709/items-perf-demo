@@ -1,14 +1,12 @@
-import type { AxiosResponse } from 'axios';
 import { reactive, ref } from 'vue';
 
 export interface PollingState<T = any> {
   attempt: number;
   isLoading: boolean;
   success: boolean;
-  error: any | null;
-  result: T | null;
+  successCount: number;
+  errorCount: number;
 }
-
 
 export function usePollingRequest() {
   const requestsCount = ref(10);
@@ -17,46 +15,42 @@ export function usePollingRequest() {
   const state = reactive<PollingState>({
     attempt: 0,
     isLoading: false,
+    successCount: 0,
+    errorCount: 0,
     success: false,
-    error: null,
-    result: null,
   });
 
-  const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   const pollingRequest = async <T = any>(
-    request: () => Promise<AxiosResponse<T>>
-  ): Promise<AxiosResponse<T>[]> => {
+    request: (attempt: number) => Promise<T>
+  ): Promise<T[]> => {
     state.isLoading = true;
     state.success = false;
-    state.error = null;
-    state.result = null;
     state.attempt = 0;
+    state.successCount = 0;
+    state.errorCount = 0;
 
-    const attempts = Array.from({ length: requestsCount.value });
+    const results: T[] = [];
 
-    const results: AxiosResponse<T>[] = [];
-
-    await attempts.reduce<Promise<void>>(async (chain, _, index) => {
-      await chain;
-
-      state.attempt = index + 1;
+    for (let i = 0; i < requestsCount.value; i++) {
+      const attempt = i + 1;
+      state.attempt = attempt;
 
       try {
-        const res = await request();
+        const res = await request(attempt);
         results.push(res);
-        state.result = res.data;
-        state.success = true;
-      } catch (err) {
-        state.error = err;
+        state.successCount++;
+      } catch {
+        state.errorCount++;
       }
 
-      if (index < attempts.length - 1) {
+      if (i < requestsCount.value - 1) {
         await delay(delayMs.value);
       }
-    }, Promise.resolve());
+    }
 
+    state.success = state.errorCount === 0;
     state.isLoading = false;
 
     return results;

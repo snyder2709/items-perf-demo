@@ -1,31 +1,36 @@
 <template>
   <input
     class="input"
-    :class="[`input--size-${size}`, { 'input--disabled': disabled }]"
+    :class="[
+      `input--size-${size}`,
+      { 'input--disabled': disabled, 'input--checkbox': type === 'checkbox' }
+    ]"
     :type="type"
-    :placeholder="placeholder"
+    :placeholder="type !== 'checkbox' ? placeholder : undefined"
     :disabled="disabled"
-    :value="modelValue"
+    :checked="type === 'checkbox' ? Boolean(modelValue) : undefined"
+    :value="type !== 'checkbox' ? modelValue : undefined"
     @input="onInput"
+    @change="onChange"
   />
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, withDefaults } from 'vue';
+import { defineEmits, defineProps, withDefaults } from 'vue';
 
-type InputType = 'text' | 'number';
+type InputType = 'text' | 'number' | 'checkbox';
 type InputSize = 'small' | 'medium' | 'large';
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: string | number;
+    modelValue?: string | number | boolean;
     type?: InputType;
     placeholder?: string;
     disabled?: boolean;
     size?: InputSize;
   }>(),
   {
-    modelValue: '',
+    modelValue: props => (props.type === 'checkbox' ? false : ''),
     type: 'text',
     placeholder: '',
     disabled: false,
@@ -34,16 +39,23 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string | number): void;
+  (e: 'update:modelValue', value: string | number | boolean): void;
 }>();
 
 function onInput(e: Event) {
   const target = e.target as HTMLInputElement;
-
+  if (props.type === 'checkbox') return; // handled in onChange
   emit(
     'update:modelValue',
     props.type === 'number' ? Number(target.value) : target.value
   );
+}
+
+function onChange(e: Event) {
+  const target = e.target as HTMLInputElement;
+  if (props.type === 'checkbox') {
+    emit('update:modelValue', target.checked);
+  }
 }
 </script>
 
@@ -77,6 +89,12 @@ function onInput(e: Event) {
 .input--size-large {
   height: var(--input-height-large);
   font-size: var(--input-font-large);
+}
+
+.input--checkbox {
+  width: auto;
+  height: auto;
+  padding: 0;
 }
 
 .input:focus {

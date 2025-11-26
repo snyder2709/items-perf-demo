@@ -20,7 +20,7 @@ export class DatabaseService {
 
     const connectionString = `postgresql://${user}:${password}@${host}:${port}/${database}`;
 
-    this.pool = new Pool({ connectionString });
+    this.pool = new Pool({ connectionString, max: 50, idleTimeoutMillis: 3000 });
 
     this.pool.on('connect', () => {
       this.logger.log(`Connected to database at ${host}:${port}`);
